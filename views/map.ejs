@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Baise - Fuckmap</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+       /* Responsive Map Height for the Map Page */
+#map {
+    height: 600px; /* Default height */
+    width: 100%; /* Ensure it stretches across the width of the container */
+}
+
+/* For smaller screens (less than 768px), make the map shorter */
+@media (max-width: 768px) {
+    #map {
+        height: 650px;
+    }
+}
+/* For smaller screens (less than 768px), make the map shorter */
+@media (min-width: 768px) {
+    #map {
+        height: 400px;
+    }
+}
+
+/* For larger screens (greater than 1200px), make the map taller */
+@media (min-width: 1200px) {
+    #map {
+        height: 800px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <h1><img src="/googlebaise.png" alt="Google Baise"></h1>
+    <div id="map"></div>
+
+    <a href="/" id="homeButton">Back to Homepage</a>
+
+    <footer style="display: block; text-align: center; margin-top: 100px;"></footer>
+        <p>website by © <a href="http://www.adambadger.net" style="text-decoration: none;">Adam Badger</a><br>
+        All rights reserved</p>
+    </footer>
+
+    <script>
+        // Initialize the map and set a default view
+        var map = L.map('map').setView([51.505, -0.09], 5); // Default to a wide view (zoom level 5)
+
+        // Add the OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Array of posts passed from the server-side
+        const posts = <%- JSON.stringify(posts) %>;
+
+        // Helper function to render stars based on the rating
+        function renderStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += i <= rating ? '&#9733;' : '&#9734;';  // Filled star if rating >= i, else empty star
+            }
+            return stars;
+        }
+
+        // Loop through posts and create markers for each post
+        posts.forEach(post => {
+            if (post.coordinates && post.coordinates.lat && post.coordinates.lon) {
+                const marker = L.marker([post.coordinates.lat, post.coordinates.lon]).addTo(map);
+
+                // Check if the post has an image, otherwise use a placeholder
+                const imageSrc = post.image ? `/${post.image}` : '/default.jpg';
+
+                // Add popup information (e.g., image, opinion, rating as stars)
+                const popupContent = `
+                    <div class="popup-content">
+                        <i>"${post.opinion}"</i><br>
+                        <strong></strong> <span class="stars">${renderStars(post.rating)}</span><br>
+                        <strong>${post.coordinates.lat}, ${post.coordinates.lon}</strong><br>
+                        <img src="${imageSrc}" alt="Post Image">
+                    </div>
+                `;
+                marker.bindPopup(popupContent);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+/* General body and form styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin: auto;
+}
+h1 img {
+    max-width: 90%;
+    height: auto;
+    width: auto;
+}
+
+
+.rainbow {
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.rainbow_text_animated {
+    background: linear-gradient(to right, #1c1cff, #fffb00 , #dfa300, #33ff33, #fc0d0d, rgb(247, 18, 209));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: rainbow_animation 6s ease-in-out infinite;
+    background-size: 400% 100%;
+}
+
+@keyframes rainbow_animation {
+    0%,100% {
+        background-position: 0 0;
+    }
+
+    50% {
+        background-position: 100% 0;
+    }
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+textarea {
+    width: 100%;
+    height: 80px;
+}
+
+#map {
+    margin-top: 10px;
+    height: 300px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+}
+
+/* Grid layout */
+#posts {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.post {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fafaf0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    overflow: hidden;
+}
+
+.post img {
+    height: 300px; /* Adjust this value to control image height */
+    width: 100%;
+    object-fit: cover; /* Makes the image cover the entire area */
+    border-radius: 5px;
+}
+
+.post p {
+    margin: 8px 0;
+}
+
+.stars {
+    color: black;
+    font-size: 1.2em;
+}
+
+/* New Post Button and Map Button as grid items */
+.new-post-button,
+.map-button {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    text-align: center;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if modal content overflows */
+    background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 60%; /* Default width */
+    max-height: 90vh; /* Limit height to prevent overflow */
+    overflow-y: auto; /* Add vertical scroll if content is too long */
+}
+
+/* Close button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover, .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Make the modal responsive */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 80%; /* Wider on small screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        width: 90%; /* Even wider on smaller screens */
+        padding: 10px; /* Reduce padding */
+    }
+
+    h2 {
+        font-size: 1.5em; /* Smaller font size for the heading */
+    }
+
+    input[type="submit"] {
+        font-size: 1.1em; /* Slightly smaller submit button */
+    }
+
+    #map {
+        height: 250px; /* Reduce map height for small screens */
+    }
+}
+
+
+
+/* Form inside the modal */
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+textarea {
+    width: 100%;
+    height: 80px;
+}
+
+#map {
+    margin-top: 10px;
+    height: 300px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+}
+/* Limit image size inside the marker popup */
+.leaflet-popup-content img {
+    margin-top: 5px;
+    max-width: 100%;      /* Ensures the image scales to fit the popup width */
+    height: auto;         /* Maintain aspect ratio */
+    max-height: 200px;    /* Optional: Adjust this value as needed */
+}
+
+
+/* Home button for the map page */
+#homeButton {
+    position: absolute;
+    margin-top: 50px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+
+/* print layout css */
+
+@media print {
+    /* Ensure posts are displayed as block and stacked vertically */
+    #posts {
+        display: block;
+    }
+
+    .post {
+        display: block;
+        page-break-before: always; /* Force a new page before each post */
+        page-break-after: always;  /* Ensure it ends with a page break */
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;         /* Remove shadow */
+        border-radius: 0;         /* Remove border-radius */
+        border: none;             /* Remove any border */
+        background: none;         /* Ensure no background is applied */
+    }
+
+    /* Style the post content for print */
+    .post img {
+        width: 100%;
+        max-height: 60vh; /* Limit the height of images to 60% of the page height */
+        height: auto;  /* Ensure the image maintains its aspect ratio */
+        object-fit: contain;  /* Ensure the image is contained within the bounds without cropping */
+        margin-bottom: 50px; /* Add spacing between the image and the coordinates */
+    }
+
+    /* Coordinates at the top */
+    .post p:first-child {
+        font-size: 1.5em;
+        margin: 0;
+        margin-bottom: 50px; /* Add spacing between coordinates and the image */
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    /* Rating and comment at the bottom */
+    .post .rating-and-comment {
+        margin-top: 50px; /* Add spacing between image and rating/comment section */
+        text-align: center;
+    }
+
+    .post .rating-and-comment p {
+        margin: 0;
+        padding: 5px 0;
+    }
+
+    /* Remove unnecessary elements */
+    #printButton,
+    footer,
+    .new-post-button,
+    #postModal,
+    .map-button {
+        display: none;
+    }
+
+    /* Hide the post div and only print its content */
+    .post {
+        visibility: hidden;  /* Hide the container */
+    }
+
+    .post * {
+        visibility: visible;  /* Make the content visible */
+        position: relative;   /* Ensure proper layout */
+    }
+}

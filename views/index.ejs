@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Baise</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+    <h1><img src="/googlebaise.png" alt="Google Baise"></h1>
+
+    <!-- Grid for posts -->
+    <div id="posts">
+        <!-- New Post Button -->
+        <div class="new-post-button" id="openModal"><strong>NEW POST</strong></div>
+    
+        <!-- Render posts dynamically -->
+        <% posts.forEach((post, index) => { %>
+            <div class="post" id="post-<%= index %>">
+                <p><strong><%= post.coordinates.lat %>, <%= post.coordinates.lon %></strong></p>
+                <img src="<%= post.image ? '/' + post.image : 'default.jpg' %>" alt="Post Image">
+                <p>
+                    <% for (let i = 0; i < 5; i++) { %>
+                        <% if (i < post.rating) { %>
+                            &#9733;  <!-- Filled star -->
+                        <% } else { %>
+                            &#9734;  <!-- Empty star -->
+                        <% } %>
+                    <% } %>
+                </p>
+                <p>"<i><%= post.opinion %></i>"</p>
+            </div>
+
+    
+            <!-- Modal for the post -->
+            <div class="modal" id="modal-<%= index %>">
+                <div class="modal-content">
+                    <span class="close" data-index="<%= index %>">&times;</span>
+                    <h2><%= post.coordinates.lat %>, <%= post.coordinates.lon %></h2>
+                    <img src="<%= post.image ? '/' + post.image : 'default.jpg' %>" alt="Post Image" style="width:100%;">
+                    <p>
+                        <% for (let i = 0; i < 5; i++) { %>
+                            <% if (i < post.rating) { %>
+                                &#9733;  <!-- Filled star -->
+                            <% } else { %>
+                                &#9734;  <!-- Empty star -->
+                            <% } %>
+                        <% } %>
+                    </p>
+                    <p>"<i><%= post.opinion %></i>"</p>
+                </div>
+            </div>
+        <% }) %>    
+
+        <!-- Map button -->
+        <a class="map-button" href="/map" style="text-decoration: none; color: inherit;">
+            <div>
+                <strong>FUCKMAP</strong>
+            </div>
+        </a>
+        
+    </div>
+
+    <!-- Modal for new post form -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2 class="rainbow rainbow_text_animated">POSTE UNE FUCKPLACE...</h2>
+            <form action="/submit-post" method="POST" enctype="multipart/form-data">
+                
+                <label for="map">Indique sur la carte un endroit où tu as fais l'amour :</label>
+                <div id="map" style="height: 400px;"></div>
+                <!-- Coordinates input field, hidden initially -->
+                <input type="hidden" id="coordinates" name="coordinates" required><br><br>
+                
+                <label for="opinion">Donne un avis (confort, conditions météorologiques, feeling...) :</label>
+                <input type="text" id="opinion" name="opinion" required><br><br>
+
+                <label for="rating">Note ton expérience de baise :</label>
+                <div id="ratingStars">
+                    <span class="star" data-value="1">&#9734;</span>
+                    <span class="star" data-value="2">&#9734;</span>
+                    <span class="star" data-value="3">&#9734;</span>
+                    <span class="star" data-value="4">&#9734;</span>
+                    <span class="star" data-value="5">&#9734;</span>
+                </div>
+                
+                <!-- Hidden field to store the selected rating value -->
+                <input type="hidden" id="rating" name="rating" value="0">
+
+                <br><br>
+
+                <label for="image">Image du lieu :</label>
+                <input type="file" id="image" name="image"><br><br>
+                
+                <p style="color: rgb(156, 156, 156);" alt="warning">Attention les données que vous entrez ici ne seront jamais associées à votre nom mais pourront tout de même être récupérées par l'auteur du site à des fins éditoriales. Pour le bon déroulement du projet merci de ne pas poster de photos explicites ou qui pourraient porter atteinte à autrui.<br><br><i>En vous remerciant de votre participation !</i><br></p>
+
+                <input type="submit" value="PUBLIER ANONYMEMENT" style="text-align: center; margin: auto; font-size: larger; font-weight: bold; margin-top: 20px;">
+            </form>
+        </div>
+    </div>
+
+    <footer style="display: block; text-align: center; margin: auto; margin-top: 100px; margin-bottom: 50px;">
+        
+        <button id="printButton">Print Posts as PDF</button>
+        
+        <p>website by © <a href="http://www.adambadger.net" style="text-decoration: none;">Adam Badger</a><br>
+        All rights reserved</p>
+
+    </footer>
+    
+    <script>
+        // Modal for each post
+const posts = document.querySelectorAll('.post');
+const modals = document.querySelectorAll('.modal');
+const closeButtons = document.querySelectorAll('.close');
+
+posts.forEach((post, index) => {
+    post.addEventListener('click', () => {
+        const modal = document.getElementById(`modal-${index}`);
+        modal.style.display = 'flex';
+    });
+});
+
+closeButtons.forEach((button) => {
+    button.addEventListener('click', (event) => {
+        const index = event.target.getAttribute('data-index');
+        const modal = document.getElementById(`modal-${index}`);
+        modal.style.display = 'none';
+    });
+});
+
+window.addEventListener('click', (event) => {
+    modals.forEach((modal) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+});
+
+
+        // Modal handling
+        const modal = document.getElementById('postModal');
+        const openModalBtn = document.getElementById('openModal');
+        const closeModalBtn = document.getElementById('closeModal');
+
+        openModalBtn.onclick = function () {
+            modal.style.display = 'flex';
+        }
+
+        closeModalBtn.onclick = function () {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Star rating system
+        const stars = document.querySelectorAll('#ratingStars .star');
+        let selectedRating = 0;
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', () => {
+                const value = parseInt(star.getAttribute('data-value'));
+                highlightStars(value);
+            });
+
+            star.addEventListener('mouseout', () => {
+                highlightStars(selectedRating);
+            });
+
+            star.addEventListener('click', () => {
+                selectedRating = parseInt(star.getAttribute('data-value'));
+                highlightStars(selectedRating);
+                document.getElementById('rating').value = selectedRating;  // Set hidden input value to the selected rating
+            });
+        });
+
+        function highlightStars(rating) {
+            stars.forEach(star => {
+                const value = parseInt(star.getAttribute('data-value'));
+                if (value <= rating) {
+                    star.innerHTML = '&#9733;';  // Filled star
+                } else {
+                    star.innerHTML = '&#9734;';  // Empty star
+                }
+            });
+        }
+
+        // Initialize stars with 0 rating
+        highlightStars(0);
+
+        // Initialize the map in the modal form
+        var map = L.map('map').setView([51.505, -0.09], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var marker = L.marker([51.505, -0.09]).addTo(map);
+
+        map.on('click', function (e) {
+            var lat = e.latlng.lat;
+            var lon = e.latlng.lng;
+            marker.setLatLng([lat, lon]);
+            document.getElementById('coordinates').value = JSON.stringify({ lat: lat, lon: lon });
+        });
+
+        // Print posts when the print button is clicked
+    document.getElementById('printButton').addEventListener('click', function () {
+        window.print(); // Opens the print dialog
+    });
+    </script>
+</body>
+</html>

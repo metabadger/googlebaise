@@ -1,0 +1,28 @@
+{
+  "name": "202501_web_googlebaise",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "csrf": "^3.1.0",
+    "csurf": "^1.2.2",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "mongo-sanitize": "^1.1.0",
+    "mongoose": "^8.9.3",
+    "multer": "^1.4.5-lts.1",
+    "path": "^0.12.7",
+    "xss": "^1.0.15",
+    "xss-clean": "^0.1.4"
+  }
+}
